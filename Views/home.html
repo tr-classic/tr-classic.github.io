@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Tomb Raider Classic Level Editor</title>
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+    <script src="https://code.jquery.com/pep/0.4.2/pep.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+
+    <style>
+      body{
+        height:100vh;
+        background-color: #222 ;
+        color: #ccc ;
+        overflow:hidden;
+      }
+      html, body {
+          overflow: hidden;
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+      }
+
+      #three_env {
+          width: 100%;
+          height: 100%;
+          touch-action: none;
+      }
+      #three_env{
+        position: fixed ;
+      }
+      #three_menu{
+        position: fixed;
+        z-index: -10 ;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+      }
+      #mouse_info{
+        z-index: 12 ;
+        position:absolute;
+      }
+    </style>
+    <script type="text/javascript">
+      let mouseInfo = document.getElementById("mouse_info") ;
+      var cursorX = 0;
+      var cursorY = 0;
+      document.onmousemove = function(e){
+          cursorX = e.pageX;
+          cursorY = e.pageY;
+
+      }
+    </script>
+  </head>
+  <body>
+    <canvas id="three_env" style="position: fixed;">
+    </canvas>
+    <div id="three_menu">
+    </div>
+  </body>
+  <script src="/src/scripts/terrain.js"></script>
+  <script src="/src/scripts/main.js"></script>
+</html>
