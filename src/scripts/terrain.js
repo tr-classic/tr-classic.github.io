@@ -41,27 +41,42 @@ class Terrain{
     var pos = [] ;
     var ids = [] ;
     var colors = [] ;
+    var ind = 0 ;
 
     for(let i =0 ; i<this.width ; i++){
       for(let j =0 ;j<this.length ; j++){
+        ind = (j+i)*.5 ;
+
+        //* SQUARE GROUND
         pos.push(
-          i  ,0,j  ,
-          i  ,Math.random(),j+1,
-          i+1,0,j+1,
-          i  ,0,j  ,
-          i+1,0,j+1,
-          i+1,Math.random(),j  ,
+          i  ,ind,j  ,
+          i  ,ind,j+1,
+          i+1,ind,j+1,
+          i+1,ind,j  ,
         ) ;
 
 
-        var index = (i*this.length+j)*6 ;
+        var index = (i*this.length+j)*4 ;
 
         ids.push(
           index  ,index+2,index+1,
-          index+3,index+5,index+4
+          index  ,index+3,index+2
         ) ;
 
-        colors.push(1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0,  0, 1, 0, 1) ;
+        if(i != 0){
+          ids.push(
+            (i*this.length+j)*4, (i*this.length+j)*4+1    , ((i-1)*this.length+j)*4+2,
+            ((i-1)*this.length+j)*4+3, (i*this.length+j)*4      , ((i-1)*this.length+j)*4+2,
+          ) ;
+        }
+
+        if(j != 0){
+          ids.push(
+            index,index-3,index-2,
+            index+3,index,index-2,
+          ) ;
+        }
+        //*/
       }
     }
     var normals = [] ;
@@ -72,10 +87,11 @@ class Terrain{
     vertexData.positions = pos;
     vertexData.indices = ids;
     vertexData.normals = normals;
-    vertexData.color = colors ;
 
     //Apply vertexData to custom mesh
     vertexData.applyToMesh(geo);
+
+    console.log(geo) ;
 
     //geo.parent = this.object ;
   }

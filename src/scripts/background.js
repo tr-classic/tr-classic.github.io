@@ -1,6 +1,34 @@
+var cursorX = 0;
+var cursorY = 0;
+document.onmousemove = function(e){
+    cursorX = e.pageX;
+    cursorY = e.pageY - window.scrollY;
+}
+
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
+
+function moveTo(object, end, time){
+  var animation = 0 ;
+  var beg = new THREE.Vector3(object.position.x,object.position.y,object.position.z) ;
+  var x = setInterval(function(){
+    animation+=10 ;
+    if(animation > time)
+      animation = time ;
+
+    var avancement = (animation/time) ;
+    object.position.set(
+      beg.x+((end.x-beg.x)*avancement),
+      beg.y+((end.y-beg.y)*avancement),
+      beg.z+((end.z-beg.z)*avancement),
+    ) ;
+    if(animation >= time){
+      console.log("animation terminated") ;
+      clearInterval(x) ;
+    }
+  }, 10);
+}
 
 
 let container = document.getElementById( 'three_env' );
@@ -12,28 +40,17 @@ if(container == null){
   renderer.setSize( window.innerWidth, window.innerHeight );
   container.appendChild( renderer.domElement );
 
-  // var cube = new THREE.Mesh(new THREE.BoxGeometry( .1, .001, .1 ), new THREE.MeshBasicMaterial( {color: 0x00ff00} ));
-  // cube.position.z = 2 ;
-  // cube.position.y = 1.75 ;
-  // scene.add(cube) ;
+  var tr = new TR(scene) ;
+  tr.load() ;
 
-  var pointLight = new THREE.PointLight( 0xffffff, 1, 6 );
-  pointLight.position.set( 0, 0, 0 );
-  scene.add( pointLight );
-
-
+  var axesHelper = new THREE.AxesHelper( 5 );
+  scene.add( axesHelper );
 
   var animate = function () {
     requestAnimationFrame( animate );
-    camera.position.x =  ((cursorX/window.innerWidth )-0.5) *0.6;
-    camera.position.y =  ((cursorY/window.innerHeight)-0.5) *0.6 + 1.50;
+    tr.refresh() ;
 
-    camera.rotation.z = window.scrollY / window.scrollMaxY * Math.PI *2 + 1;
-
-    camera.lookAt(0,1.5,2) ;
-    pointLight.position.set(camera.position.x,camera.position.y,camera.position.z) ;
-
-    renderer.render( scene, camera );
+    renderer.render( scene, tr.view );
   };
 
   animate();
