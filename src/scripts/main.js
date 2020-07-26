@@ -35,12 +35,14 @@ function onWindowResize(){
 }
 
 window.addEventListener('click', function(){
+	console.log(tr) ;
+	tr.animations[0].play() ;
   tr.getTorch() ;
 });
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
+var clock = new THREE.Clock() ;
 
 function moveTo(object, end, time){
   var animation = 0 ;
@@ -78,7 +80,7 @@ if(container == null){
 
   var terrain = new Terrain(scene) ;
 
-  tr.object.position.set(terrain.length/2,0,terrain.width/2) ;
+  //tr.object.position.set(terrain.length/2,0,terrain.width/2) ;
 
   var axesHelper = new THREE.AxesHelper( 1 );
   scene.add( axesHelper );
@@ -86,6 +88,9 @@ if(container == null){
   var animate = function () {
     requestAnimationFrame( animate );
     tr.refresh() ;
+
+		var mixerUpdateDelta = clock.getDelta();
+		tr.animations_mixer.update(mixerUpdateDelta);
 
     renderer.render( scene, tr.view );
   };

@@ -36,20 +36,10 @@ class Terrain{
 
     tgeometry.uvsNeedUpdate = true ;
 
-    var material = new THREE.MeshLambertMaterial( {color: 0xffcccc} );
+    var material = new THREE.MeshBasicMaterial( {color: 0xffcccc} );
     var terr = new THREE.Mesh( tgeometry, material );
+    
     this.object.add( terr );
-
-    var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-    //var material = new THREE.MeshPhongMaterial( { color: 0xffff00 } );
-    var mesh = new THREE.Mesh( geometry, material );
-
-    mesh.receiveShadow = true ;
-    mesh.position.set(this.length/2,0,this.width/2) ;
-    this.object.add(mesh) ;
-
-    console.log(terr) ;
-    console.log(mesh) ;
   }
 }
 

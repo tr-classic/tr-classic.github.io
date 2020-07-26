@@ -9,9 +9,11 @@ class TR{
     this.object.rotation.y = Math.PI ;
     this.scene.add(this.object) ;
     this.view = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 1000 ) ;
+		this.animations = [] ;
+		this.animations_mixer = [] ;
 
     this.pointLight = new THREE.PointLight( 0xffffff, 1, 12 );
-    this.pointLight.intensity = .3 ;
+    this.pointLight.intensity = .9 ;
     this.pointLight.position.set(this.view.position.x,this.view.position.y,this.view.position.z);
     this.object.add( this.pointLight );
 
@@ -24,15 +26,6 @@ class TR{
     this.refresh() ;
 
     this.hand = null ;
-
-    console.log(this) ;
-
-    var directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
-    directionalLight.position.set(1,1,-1) ;
-    directionalLight.lookAt(0,0,0) ;
-
-
-    this.object.add( directionalLight );
   }
 
   refresh(){
@@ -53,8 +46,11 @@ class TR{
     var model ;
     var skeleton ;
     var mixer ;
+		var animm;
+		var idleAction ;
 
-  	loader.load('/src/obj/tr.glb', function (gltf) {
+		var instance = this ;
+		var fct = function (gltf) {
 
   		model = gltf.scene;
 
@@ -69,38 +65,25 @@ class TR{
 
       obj.add(model) ;
 
-
-
-  		//
-
   		skeleton = new THREE.SkeletonHelper(model);
-  		skeleton.visible = false;
+  		skeleton.visible = true;
   		obj.add(skeleton);
 
-  		//
+  		instance.animations_mixer = new THREE.AnimationMixer(model);
 
-  		//createPanel();
+  		idleAction = instance.animations_mixer.clipAction(gltf.animations[0]);
+			idleAction.loop = false ;
+			idleAction.setLoop( THREE.LoopOnce );
+	  	idleAction.clampWhenFinished = true;
+			instance.animations.push(idleAction) ;
 
+			this.object.children[3].castShadow = true ;
+			this.object.children[3].children[0].castShadow = true ;
+			//this.object.children[3].visible = false ;
 
-  		//
+  	} ;
 
-  		var animations = gltf.animations;
-
-  		mixer = new THREE.AnimationMixer(model);
-
-      /*
-  		idleAction = mixer.clipAction(animations[0]);
-  		walkAction = mixer.clipAction(animations[3]);
-  		runAction = mixer.clipAction(animations[1]);
-      */
-
-  		//actions = [idleAction, walkAction, runAction];
-
-  		//activateAllActions();
-
-  		//animate();
-
-  	});
+  	loader.load('/src/obj/tr.glb', fct);
   }
 
   getTorch(){
@@ -108,6 +91,8 @@ class TR{
       console.log("vous avez deja une torche") ;
       return ;
     }
+
+		this.animations[0].play().reset() ;
 
     this.hand = new THREE.Object3D() ;
     //this.object.children[1].children[18] = this.hand ;

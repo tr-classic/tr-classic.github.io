@@ -23,7 +23,12 @@ function onWindowResize(){
 }
 
 window.addEventListener('click', function(){
+  tr.animations[0].play() ;
+  console.log(tr) ;
   tr.getTorch() ;
+
+
+    moveTo(tr.object.position, new THREE.Vector3(0,0,0),200) ;
 });
 
 var scene = new THREE.Scene();
@@ -63,6 +68,8 @@ if(container == null){
 
   var tr = new TR(scene) ;
   tr.load() ;
+
+  moveTo(tr.object.position, new THREE.Vector3(0,0,0),200) ;
 
   var axesHelper = new THREE.AxesHelper( 5 );
   scene.add( axesHelper );
