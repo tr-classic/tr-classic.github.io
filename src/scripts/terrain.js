@@ -3,8 +3,11 @@ class Terrain{
     this.scene = scene ;
     this.length = 30 ;
     this.width = 30 ;
-    this.object = new BABYLON.Mesh("custom", this.scene);
-    this.default_bab() ;
+    //this.object = new BABYLON.Mesh("custom", this.scene);
+    this.object = new THREE.Object3D() ;
+    this.default() ;
+    this.scene.add(this.object) ;
+
 
   }
 
@@ -31,68 +34,23 @@ class Terrain{
 
     tgeometry.computeBoundingSphere();
 
+    tgeometry.uvsNeedUpdate = true ;
 
-    var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
-    var cube = new THREE.Mesh( tgeometry, material );
-    this.object.add( cube );
-  }
-  default_bab(){
-    var geo = new BABYLON.Mesh("custom", this.scene);
-    var pos = [] ;
-    var ids = [] ;
-    var colors = [] ;
-    var ind = 0 ;
+    var material = new THREE.MeshLambertMaterial( {color: 0xffcccc} );
+    var terr = new THREE.Mesh( tgeometry, material );
+    this.object.add( terr );
 
-    for(let i =0 ; i<this.width ; i++){
-      for(let j =0 ;j<this.length ; j++){
-        ind = (j+i)*.5 ;
+    var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
+    //var material = new THREE.MeshPhongMaterial( { color: 0xffff00 } );
+    var mesh = new THREE.Mesh( geometry, material );
 
-        //* SQUARE GROUND
-        pos.push(
-          i  ,ind,j  ,
-          i  ,ind,j+1,
-          i+1,ind,j+1,
-          i+1,ind,j  ,
-        ) ;
+    mesh.receiveShadow = true ;
+    mesh.position.set(this.length/2,0,this.width/2) ;
+    this.object.add(mesh) ;
 
-
-        var index = (i*this.length+j)*4 ;
-
-        ids.push(
-          index  ,index+2,index+1,
-          index  ,index+3,index+2
-        ) ;
-
-        if(i != 0){
-          ids.push(
-            (i*this.length+j)*4, (i*this.length+j)*4+1    , ((i-1)*this.length+j)*4+2,
-            ((i-1)*this.length+j)*4+3, (i*this.length+j)*4      , ((i-1)*this.length+j)*4+2,
-          ) ;
-        }
-
-        if(j != 0){
-          ids.push(
-            index,index-3,index-2,
-            index+3,index,index-2,
-          ) ;
-        }
-        //*/
-      }
-    }
-    var normals = [] ;
-
-  	var vertexData = new BABYLON.VertexData();
-  	BABYLON.VertexData.ComputeNormals(pos, ids, normals);
-
-    vertexData.positions = pos;
-    vertexData.indices = ids;
-    vertexData.normals = normals;
-
-    //Apply vertexData to custom mesh
-    vertexData.applyToMesh(geo);
-
-    console.log(geo) ;
-
-    //geo.parent = this.object ;
+    console.log(terr) ;
+    console.log(mesh) ;
   }
 }
+
+export {Terrain} ;
