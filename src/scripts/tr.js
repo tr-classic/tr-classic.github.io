@@ -8,7 +8,7 @@ class TR{
     this.object = new THREE.Object3D() ;
     this.object.rotation.y = Math.PI ;
     this.scene.add(this.object) ;
-    this.view = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 1000 ) ;
+    this.view = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 20 ) ;
 		this.animations = [] ;
 		this.animations_mixer = [] ;
 
@@ -75,6 +75,11 @@ class TR{
 			idleAction.setLoop( THREE.LoopOnce );
 	  	idleAction.clampWhenFinished = true;
 			instance.animations.push(idleAction) ;
+
+			setTimeout(function(){
+				instance.getTorch() ;
+			}, 3000);
+			document.getElementById("loading").style = "display:none;"
   	} ;
 
   	loader.load('/src/obj/tr.glb', fct);
@@ -126,7 +131,7 @@ class TR{
       },50) ;
     }
 
-    setTimeout(_timeout, 2800);
+    setTimeout(_timeout, 28000);
   }
 }
 

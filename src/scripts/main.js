@@ -45,7 +45,7 @@ var scene = new THREE.Scene();
 {
 	const color = 0x000000;  // white
   const near = 1;
-  const far = 50;
+  const far = 20;
   scene.fog = new THREE.Fog(color, near, far);
 }
 var clock = new THREE.Clock() ;
