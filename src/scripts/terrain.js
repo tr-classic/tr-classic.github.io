@@ -1,9 +1,9 @@
 class Terrain{
   constructor(scene){
     this.scene = scene ;
-    this.length = 10 ;
-    this.width = 5 ;
-    this.height = 5 ;
+    this.length = 100 ;
+    this.width = 100 ;
+    this.height = 2.5 ;
     //this.object = new BABYLON.Mesh("custom", this.scene);
     this.object = new THREE.Object3D() ;
     this.default() ;
@@ -17,15 +17,21 @@ class Terrain{
 
     for(let i =0 ; i<=this.width ; i++){
       for(let j =0 ;j<=this.length ; j++){
-        tgeometry.vertices.push(
-          new THREE.Vector3(  i, 0, j )
-        );
+        if(i==this.width/2 && j==this.length/2){
+            tgeometry.vertices.push(
+              new THREE.Vector3(  i, 0, j )
+            );
+        }else{
+          tgeometry.vertices.push(
+            new THREE.Vector3(  i, (Math.random()-.5)*.5, j )
+          );
+        }
       }
     }
     for(let i =this.width ; i>=0 ; i--){
       for(let j =0 ;j<=this.length ; j++){
         tgeometry.vertices.push(
-          new THREE.Vector3(  i, this.height, j )
+          new THREE.Vector3(  i, this.height + Math.random(), j )
         );
       }
     }
@@ -103,11 +109,18 @@ class Terrain{
 
     tgeometry.uvsNeedUpdate = true ;
 
-    var material = new THREE.MeshBasicMaterial( {color: 0xffcccc} );
+    var material = new THREE.MeshBasicMaterial( {color: 0xaaaaaa} );
     //material.wireframe = true ;
     var terr = new THREE.Mesh( tgeometry, material );
 
     this.object.add( terr );
+
+
+    // wireframe
+    var geo = new THREE.EdgesGeometry( tgeometry ); // or WireframeGeometry
+    var mat = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 } );
+    var wireframe = new THREE.LineSegments( geo, mat );
+    terr.add( wireframe );
   }
 }
 
