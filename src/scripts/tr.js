@@ -56,7 +56,12 @@ class TR{
 
   		model.traverse(function (object) {
 
-  			if (object.isMesh) object.castShadow = true;
+  			object.castShadow = true;
+				if(object.name == "RHand"){
+					instance.hand = object ;
+					object.children = [] ;
+					console.log(object) ;
+				}
 
   		});
 
@@ -66,7 +71,7 @@ class TR{
       obj.add(model) ;
 
   		skeleton = new THREE.SkeletonHelper(model);
-  		skeleton.visible = true;
+  		skeleton.visible = false;
   		obj.add(skeleton);
 
   		instance.animations_mixer = new THREE.AnimationMixer(model);
@@ -76,28 +81,26 @@ class TR{
 			idleAction.setLoop( THREE.LoopOnce );
 	  	idleAction.clampWhenFinished = true;
 			instance.animations.push(idleAction) ;
-
-			this.object.children[3].castShadow = true ;
-			this.object.children[3].children[0].castShadow = true ;
-			//this.object.children[3].visible = false ;
-
   	} ;
 
   	loader.load('/src/obj/tr.glb', fct);
   }
 
   getTorch(){
-    if(this.hand != null){
+		console.log(this.hand) ;
+
+		//*
+    if(this.hand.children.length != 0){
       console.log("vous avez deja une torche") ;
       return ;
     }
+		//*/
 
 		this.animations[0].play().reset() ;
 
-    this.hand = new THREE.Object3D() ;
-    //this.object.children[1].children[18] = this.hand ;
-    this.object.add(this.hand) ;
-    this.hand.position.set(-.62,1.4,0) ;
+    this.hand.add(new THREE.Object3D()) ;
+    //this.object.add(this.hand.) ;
+    //this.hand.position.set(-.62,1.4,0) ;
     var geometry = new THREE.CylinderGeometry( .01, .01, .1, 5 );
     var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
     var cylinder = new THREE.Mesh( geometry, material );
@@ -122,13 +125,14 @@ class TR{
         if(tick==0){
           clearInterval(x) ;
 
-          instance.object.children.pop() ;
-          instance.hand = null ;
+					instance.hand.children=[];
+
+					console.log(instance.hand) ;
         }
       },50) ;
     }
 
-    setTimeout(_timeout, 28000);
+    setTimeout(_timeout, 2800);
   }
 }
 

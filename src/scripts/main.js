@@ -35,7 +35,6 @@ function onWindowResize(){
 }
 
 window.addEventListener('click', function(){
-	console.log(tr) ;
 	tr.animations[0].play() ;
   tr.getTorch() ;
 });
@@ -90,7 +89,8 @@ if(container == null){
     tr.refresh() ;
 
 		var mixerUpdateDelta = clock.getDelta();
-		tr.animations_mixer.update(mixerUpdateDelta);
+		if(tr.animations_mixer != undefined && tr.animations_mixer.length != 0)
+			tr.animations_mixer.update(mixerUpdateDelta);
 
     renderer.render( scene, tr.view );
   };
