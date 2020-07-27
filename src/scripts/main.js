@@ -78,7 +78,7 @@ let container = document.getElementById( 'three_env' );
 if(container == null){
   console.error("Pas d'élément nommé 'three_env' dans le html") ;
 }else{
-  var renderer = new THREE.WebGLRenderer();
+  var renderer = new THREE.WebGLRenderer({antialias:true});
   renderer.setSize( window.innerWidth, window.innerHeight );
   container.appendChild( renderer.domElement );
 
