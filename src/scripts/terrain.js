@@ -1,21 +1,50 @@
 class Terrain{
   constructor(scene){
     this.scene = scene ;
-    this.length = 30 ;
-    this.width = 30 ;
+    this.length = 10 ;
+    this.width = 5 ;
+    this.height = 5 ;
     //this.object = new BABYLON.Mesh("custom", this.scene);
     this.object = new THREE.Object3D() ;
     this.default() ;
     this.scene.add(this.object) ;
 
+    noise.seed((Date.now()*Math.random())%100);
+  }
 
+  cave_terrain(){
+    var tgeometry = new THREE.Geometry();
+
+    for(let i =0 ; i<=this.width ; i++){
+      for(let j =0 ;j<=this.length ; j++){
+        tgeometry.vertices.push(
+          new THREE.Vector3(  i, 0, j )
+        );
+      }
+    }
+    for(let i =this.width ; i>=0 ; i--){
+      for(let j =0 ;j<=this.length ; j++){
+        tgeometry.vertices.push(
+          new THREE.Vector3(  i, this.height, j )
+        );
+      }
+    }
+
+    for(let i =0 ; i<=this.width*2 ; i++){
+      for(let j =0 ;j<this.length ; j++){
+        tgeometry.faces.push( new THREE.Face3( (j)+(i)*(this.length+1) ,(j+1)+(i+1)*(this.length+1) ,(j)+(i+1)*(this.length+1) ) );
+        tgeometry.faces.push( new THREE.Face3( (j)+(i)*(this.length+1) ,(j+1)+(i)*(this.length+1) ,(j+1)+(i+1)*(this.length+1) ) );
+      }
+    }
+
+    return tgeometry;
   }
 
   smooth_terrain(){
     var tgeometry = new THREE.Geometry();
 
-    for(let i =0 ; i<this.width ; i++){
-      for(let j =0 ;j<this.length ; j++){
+    for(let i =0 ; i<=this.width ; i++){
+      for(let j =0 ;j<=this.length ; j++){
         tgeometry.vertices.push(
           new THREE.Vector3(  i, 0, j )
         );
@@ -24,10 +53,8 @@ class Terrain{
 
     for(let i =0 ; i<this.width ; i++){
       for(let j =0 ;j<this.length ; j++){
-        if(j!=this.length-1 && i!=this.width-1){
-          tgeometry.faces.push( new THREE.Face3( (j)+(i)*this.width ,(j+1)+(i+1)*this.width ,(j)+(i+1)*this.width ) );
-          tgeometry.faces.push( new THREE.Face3( (j)+(i)*this.width ,(j+1)+(i)*this.width ,(j+1)+(i+1)*this.width ) );
-        }
+        tgeometry.faces.push( new THREE.Face3( (j)+(i)*(this.length+1) ,(j+1)+(i+1)*(this.length+1) ,(j)+(i+1)*(this.length+1) ) );
+        tgeometry.faces.push( new THREE.Face3( (j)+(i)*(this.length+1) ,(j+1)+(i)*(this.length+1) ,(j+1)+(i+1)*(this.length+1) ) );
       }
     }
 
@@ -39,12 +66,12 @@ class Terrain{
 
     for(let i =0 ; i<this.width ; i++){
       for(let j =0 ;j<this.length ; j++){
-        var height = -.6 ;
+        var height = 0 ;
         tgeometry.vertices.push(
-          new THREE.Vector3(  i  , (i+j)*height, j   ),
-          new THREE.Vector3(  i+1, (i+j)*height, j   ),
-          new THREE.Vector3(  i  , (i+j)*height, j+1 ),
-          new THREE.Vector3(  i+1, (i+j)*height, j+1 ),
+          new THREE.Vector3(  i  , height, j   ),
+          new THREE.Vector3(  i+1, height, j   ),
+          new THREE.Vector3(  i  , height, j+1 ),
+          new THREE.Vector3(  i+1, height, j+1 ),
         );
       }
     }
@@ -70,7 +97,7 @@ class Terrain{
 
   default(){
     //var tgeometry = this.smooth_terrain() ;
-    var tgeometry = this.square_terrain() ;
+    var tgeometry = this.cave_terrain() ;
 
     tgeometry.computeBoundingSphere();
 

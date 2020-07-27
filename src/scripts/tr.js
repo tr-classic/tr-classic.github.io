@@ -12,16 +12,10 @@ class TR{
 		this.animations = [] ;
 		this.animations_mixer = [] ;
 
-    this.pointLight = new THREE.PointLight( 0xffffff, 1, 12 );
-    this.pointLight.intensity = .9 ;
-    this.pointLight.position.set(this.view.position.x,this.view.position.y,this.view.position.z);
-    this.object.add( this.pointLight );
-
     this.object.add(this.view) ;
 
-    this.view.position.set(0,1.5,-2) ;
-    this.view.lookAt(0, 1.5,0) ;
-    this.pointLight.position.set(0,1.5,-2);
+    //this.view.lookAt(0, 1.5,0) ;
+		//this.view.position.set(0,1.5,-2) ;
 
     this.refresh() ;
 

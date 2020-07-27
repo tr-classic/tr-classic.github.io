@@ -7,7 +7,8 @@ import {
 
 import {TR} from './tr.js' ;
 import {Terrain} from './terrain.js' ;
-
+import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
+/*
 var cursorX = 0;
 var cursorY = 0;
 document.onmousemove = function(e){
@@ -15,7 +16,7 @@ document.onmousemove = function(e){
     cursorY = e.pageY - window.scrollY;
     tr.view.position.y = (cursorY / window.innerHeight -.5  ) *4;
     tr.view.position.x = (cursorX / window.innerWidth  -.5) *4;
-}
+}*/
 
 function createCube(){
   var geometry = new THREE.BoxGeometry( .1, .1, .1 );
@@ -33,15 +34,22 @@ function onWindowResize(){
     renderer.setSize( window.innerWidth, window.innerHeight );
 
 }
-
+/*
 window.addEventListener('click', function(){
 	tr.animations[0].play() ;
   tr.getTorch() ;
 });
+//*/
 
 var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+{
+	const color = 0x000000;  // white
+  const near = 1;
+  const far = 50;
+  scene.fog = new THREE.Fog(color, near, far);
+}
 var clock = new THREE.Clock() ;
+
 
 function moveTo(object, end, time){
   var animation = 0 ;
@@ -77,12 +85,32 @@ if(container == null){
   var tr = new TR(scene) ;
   tr.load() ;
 
-  var terrain = new Terrain(scene) ;
+	var ambilight = new THREE.AmbientLight( 0xcccccc );
+	scene.add(ambilight) ;
 
-  //tr.object.position.set(terrain.length/2,0,terrain.width/2) ;
+	var controls = new OrbitControls( tr.view, renderer.domElement );
+	controls.keys = {
+		LEFT: 37, //left arrow
+		UP: 38, // up arrow
+		RIGHT: 39, // right arrow
+		BOTTOM: 40 // down arrow
+	}
+
+  var terrain = new Terrain(scene) ;
+	tr.object.position.set(0,0,0) ;
+	//tr.view.position.set(0,0,0) ;
+
+	tr.view.position.set(0,0,-2) ;
+
+	controls.target.set(0,1.5,0) ;
+
+	tr.object.position.set(terrain.width/2,0,terrain.length/2) ;
+
+	//console.log(controls.target) ;
+
 
   var axesHelper = new THREE.AxesHelper( 1 );
-  scene.add( axesHelper );
+  //scene.add( axesHelper );
 
   var animate = function () {
     requestAnimationFrame( animate );
