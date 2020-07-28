@@ -123,5 +123,3 @@ class Terrain{
     terr.add( wireframe );
   }
 }
-
-export {Terrain} ;

@@ -1,13 +1,19 @@
+console.warn( "THREE.MTLLoader: As part of the transition to ES6 Modules, the files in 'examples/js' were deprecated in May 2020 (r117) and will be deleted in December 2020 (r124). You can find more information about developing using ES6 Modules in https://threejs.org/docs/index.html#manual/en/introduction/Import-via-modules." );
+/**
+ * Loads a Wavefront .mtl file specifying materials
+ *
+ * @author angelxuanchang
+ */
 
-var MTLLoader = function ( manager ) {
+THREE.MTLLoader = function ( manager ) {
 
-	Loader.call( this, manager );
+	THREE.Loader.call( this, manager );
 
 };
 
-MTLLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
+THREE.MTLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype ), {
 
-	constructor: MTLLoader,
+	constructor: THREE.MTLLoader,
 
 	/**
 	 * Loads and parses a MTL asset from a URL.
@@ -26,9 +32,9 @@ MTLLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 		var scope = this;
 
-		var path = ( this.path === '' ) ? LoaderUtils.extractUrlBase( url ) : this.path;
+		var path = ( this.path === '' ) ? THREE.LoaderUtils.extractUrlBase( url ) : this.path;
 
-		var loader = new FileLoader( this.manager );
+		var loader = new THREE.FileLoader( this.manager );
 		loader.setPath( this.path );
 		loader.load( url, function ( text ) {
 
@@ -67,7 +73,7 @@ MTLLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 	 * Parses a MTL file.
 	 *
 	 * @param {String} text - Content of MTL file
-	 * @return {MTLLoader.MaterialCreator}
+	 * @return {THREE.MTLLoader.MaterialCreator}
 	 *
 	 * @see setPath setResourcePath
 	 *
@@ -125,7 +131,7 @@ MTLLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 		}
 
-		var materialCreator = new MTLLoader.MaterialCreator( this.resourcePath || path, this.materialOptions );
+		var materialCreator = new THREE.MTLLoader.MaterialCreator( this.resourcePath || path, this.materialOptions );
 		materialCreator.setCrossOrigin( this.crossOrigin );
 		materialCreator.setManager( this.manager );
 		materialCreator.setMaterials( materialsInfo );
@@ -136,13 +142,13 @@ MTLLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 } );
 
 /**
- * Create a new MTLLoader.MaterialCreator
+ * Create a new THREE.MTLLoader.MaterialCreator
  * @param baseUrl - Url relative to which textures are loaded
  * @param options - Set of options on how to construct the materials
  *                  side: Which side to apply the material
- *                        FrontSide (default), THREE.BackSide, THREE.DoubleSide
+ *                        THREE.FrontSide (default), THREE.BackSide, THREE.DoubleSide
  *                  wrap: What type of wrapping to apply for textures
- *                        RepeatWrapping (default), THREE.ClampToEdgeWrapping, THREE.MirroredRepeatWrapping
+ *                        THREE.RepeatWrapping (default), THREE.ClampToEdgeWrapping, THREE.MirroredRepeatWrapping
  *                  normalizeRGB: RGBs need to be normalized to 0-1 from 0-255
  *                                Default: false, assumed to be already normalized
  *                  ignoreZeroRGBs: Ignore values of RGBs (Ka,Kd,Ks) that are all 0's
@@ -150,7 +156,7 @@ MTLLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
  * @constructor
  */
 
-MTLLoader.MaterialCreator = function ( baseUrl, options ) {
+THREE.MTLLoader.MaterialCreator = function ( baseUrl, options ) {
 
 	this.baseUrl = baseUrl || '';
 	this.options = options;
@@ -159,14 +165,14 @@ MTLLoader.MaterialCreator = function ( baseUrl, options ) {
 	this.materialsArray = [];
 	this.nameLookup = {};
 
-	this.side = ( this.options && this.options.side ) ? this.options.side : FrontSide;
-	this.wrap = ( this.options && this.options.wrap ) ? this.options.wrap : RepeatWrapping;
+	this.side = ( this.options && this.options.side ) ? this.options.side : THREE.FrontSide;
+	this.wrap = ( this.options && this.options.wrap ) ? this.options.wrap : THREE.RepeatWrapping;
 
 };
 
-MTLLoader.MaterialCreator.prototype = {
+THREE.MTLLoader.MaterialCreator.prototype = {
 
-	constructor: MTLLoader.MaterialCreator,
+	constructor: THREE.MTLLoader.MaterialCreator,
 
 	crossOrigin: 'anonymous',
 
@@ -363,21 +369,21 @@ MTLLoader.MaterialCreator.prototype = {
 
 					// Diffuse color (color under white light) using RGB values
 
-					params.color = new Color().fromArray( value );
+					params.color = new THREE.Color().fromArray( value );
 
 					break;
 
 				case 'ks':
 
 					// Specular color (color when light is reflected from shiny surface) using RGB values
-					params.specular = new Color().fromArray( value );
+					params.specular = new THREE.Color().fromArray( value );
 
 					break;
 
 				case 'ke':
 
 					// Emissive using RGB values
-					params.emissive = new Color().fromArray( value );
+					params.emissive = new THREE.Color().fromArray( value );
 
 					break;
 
@@ -471,7 +477,7 @@ MTLLoader.MaterialCreator.prototype = {
 
 		}
 
-		this.materials[ materialName ] = new MeshPhongMaterial( params );
+		this.materials[ materialName ] = new THREE.MeshPhongMaterial( params );
 		return this.materials[ materialName ];
 
 	},
@@ -480,8 +486,8 @@ MTLLoader.MaterialCreator.prototype = {
 
 		var texParams = {
 
-			scale: new Vector2( 1, 1 ),
-			offset: new Vector2( 0, 0 )
+			scale: new THREE.Vector2( 1, 1 ),
+			offset: new THREE.Vector2( 0, 0 )
 
 		 };
 
@@ -523,12 +529,12 @@ MTLLoader.MaterialCreator.prototype = {
 	loadTexture: function ( url, mapping, onLoad, onProgress, onError ) {
 
 		var texture;
-		var manager = ( this.manager !== undefined ) ? this.manager : DefaultLoadingManager;
+		var manager = ( this.manager !== undefined ) ? this.manager : THREE.DefaultLoadingManager;
 		var loader = manager.getHandler( url );
 
 		if ( loader === null ) {
 
-			loader = new TextureLoader( manager );
+			loader = new THREE.TextureLoader( manager );
 
 		}
 

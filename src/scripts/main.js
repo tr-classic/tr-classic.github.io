@@ -1,13 +1,4 @@
-import * as THREE from 'https://threejs.org/build/three.module.js';
 
-import Stats from 'https://threejs.org/examples/jsm/libs/stats.module.js';
-import {
-	GUI
-} from 'https://threejs.org/examples/jsm/libs/dat.gui.module.js';
-
-import {TR} from './tr.js' ;
-import {Terrain} from './terrain.js' ;
-import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
 /*
 var cursorX = 0;
 var cursorY = 0;
@@ -88,7 +79,7 @@ if(container == null){
 	var ambilight = new THREE.AmbientLight( 0xcccccc );
 	scene.add(ambilight) ;
 
-	var controls = new OrbitControls( tr.view, renderer.domElement );
+	var controls = new THREE.OrbitControls( tr.view, renderer.domElement );
 	controls.keys = {
 		LEFT: 37, //left arrow
 		UP: 38, // up arrow
@@ -97,16 +88,20 @@ if(container == null){
 	}
 
   var terrain = new Terrain(scene) ;
-	tr.object.position.set(0,0,0) ;
+	tr.object.position.set(terrain.width/2,0,terrain.length/2) ;
 	//tr.view.position.set(0,0,0) ;
 
 	tr.view.position.set(0,1.5,-4) ;
 
-	controls.target.set(0,1.5,0) ;
-
-	tr.object.position.set(terrain.width/2,0,terrain.length/2) ;
+	//controls.target = new THREE.Vector3(tr.object.position.x,tr.object.position.y,tr.object.position.z) ;
+	//controls.update();
+	controls.enableRotate = true ;
+	controls.autoRotate = true ;
+	controls.maxDistance = 4;
+	controls.minDistance = 1 ;
 
 	//console.log(controls.target) ;
+	//console.log(tr.object.position) ;
 
 
   var axesHelper = new THREE.AxesHelper( 1 );
@@ -114,7 +109,13 @@ if(container == null){
 
   var animate = function () {
     requestAnimationFrame( animate );
-    tr.refresh() ;
+    //tr.refresh() ;
+		controls.update();
+		/*
+		console.log("target") ;
+		console.log(controls) ;
+		console.log(tr) ;
+		*/
 
 		var mixerUpdateDelta = clock.getDelta();
 		if(tr.animations_mixer != undefined && tr.animations_mixer.length != 0)
@@ -125,5 +126,3 @@ if(container == null){
 
   animate();
 }
-
-//export {tr,createCube,moveTo,};

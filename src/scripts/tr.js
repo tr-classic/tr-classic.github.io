@@ -1,7 +1,3 @@
-import {
-	GLTFLoader
-} from 'https://threejs.org/examples/jsm/loaders/GLTFLoader.js';
-
 class TR{
   constructor(scene){
     this.scene = scene ;
@@ -23,7 +19,7 @@ class TR{
   }
 
   refresh(){
-    this.view.lookAt(this.object.position.x,this.object.position.y+1.5,this.object.position.z) ;
+    //this.view.lookAt(this.object.position.x,this.object.position.y+1.5,this.object.position.z) ;
   }
 
   load(){
@@ -36,7 +32,7 @@ class TR{
     var axesHelper = new THREE.AxesHelper( 0.2 );
     obj.add( axesHelper );
 
-    var loader = new GLTFLoader();
+    var loader = new THREE.GLTFLoader();
     var model ;
     var skeleton ;
     var mixer ;
@@ -134,5 +130,3 @@ class TR{
     setTimeout(_timeout, 28000);
   }
 }
-
-export {TR} ;
