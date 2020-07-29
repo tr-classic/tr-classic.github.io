@@ -19,7 +19,7 @@ class TR{
   }
 
   refresh(){
-    //this.view.lookAt(this.object.position.x,this.object.position.y+1.5,this.object.position.z) ;
+    this.view.lookAt(this.object.position.x,this.object.position.y+1.5,this.object.position.z) ;
   }
 
   load(){
@@ -50,7 +50,6 @@ class TR{
 				if(object.name == "RHand"){
 					instance.hand = object ;
 					object.children = [] ;
-					console.log(object) ;
 				}
 
   		});
@@ -82,11 +81,9 @@ class TR{
   }
 
   getTorch(){
-		console.log(this.hand) ;
-
 		//*
     if(this.hand.children.length != 0){
-      console.log("vous avez deja une torche") ;
+      console.info("vous avez deja une torche") ;
       return ;
     }
 		//*/
@@ -121,8 +118,6 @@ class TR{
           clearInterval(x) ;
 
 					instance.hand.children=[];
-
-					console.log(instance.hand) ;
         }
       },50) ;
     }
