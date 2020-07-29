@@ -2,17 +2,20 @@ try{
   let acl = new Accelerometer({frequency: 35});
 
   acl.addEventListener('reading', () => {
-    document.getElementById("log").innerHTML = acl.x*18 + " </br> " + acl.y*18 + " </br> " + acl.z*18 ;
 
     var cosx = Math.cos(act.x/10 * Math.PI) ;
     var sinx = Math.sin(act.x/10 * Math.PI) ;
     var cosy = Math.cos(act.y/10 * Math.PI) ;
     var siny = Math.sin(act.y/10 * Math.PI) ;
+    var cosz = Math.cos(act.z/10 * Math.PI) ;
+    var sinz = Math.sin(act.z/10 * Math.PI) ;
+
+    document.getElementById("log").innerHTML = "x: " + (act.x/10 * Math.PI) + "</br>y: " + (act.y/10 * Math.PI) + " </br>cosx+siny: " + (cosx+siny) + " </br>cosy+sinx: " + (cosy+sinx) ;
 
     tr.view.position.set(
-      cosx + siny,
-      cosy + sinx,
-      tr.view.position.z
+      ( cosx+sinz)*2,
+      ( cosy+sinx)*2,
+      (-cosz+siny)*2
     );
     tr.refresh() ;
   });
